@@ -68,6 +68,9 @@ Al finalizar podemos abrir con cualquier editor de texto el archivo `package.jso
     "keywords": [
         "yeoman-generator"
     ],
+    "dependencies": {
+        "yeoman-generator": "^0.20.2"
+    },
     "author": "Adrian Eguez",
     "license": "MIT"
 }
@@ -170,6 +173,9 @@ Finalmente nuestro `package.json` queda de la siguiente manera:
             "app",
             "crear-pagina"
         ],
+        "dependencies": {
+            "yeoman-generator": "^0.20.2"
+        },
         "author": "Adrian Eguez",
         "license": "MIT"
     }

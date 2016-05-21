@@ -13,6 +13,9 @@
         "generators/app",
         "generators/crear-pagina"
     ],
+    "dependencies": {
+        "yeoman-generator": "^0.20.2"
+    },
     "author": "Adrian Eguez",
     "license": "MIT"
 }
