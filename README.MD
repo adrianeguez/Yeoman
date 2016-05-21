@@ -4,8 +4,8 @@ Repositorio para aprender el uso de yeoman y gulp en la automatización de proce
 
 ## Organización del Tutorial
 
-El tutorial está divido en pasos 
+El tutorial está divido en pasos
 
-Author
+Autor
 
 [Adrian Eguez](https://github.com/adrianeguez)
