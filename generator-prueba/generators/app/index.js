@@ -1,12 +1,28 @@
 var generators = require('yeoman-generator');
 
 module.exports = generators.Base.extend({
-    //Corren en orden los metodos
-    cualquierNombre: function () {
-        console.log('Primero va a correr el metodo cualquierNombre');
+    //Corren en orden los metodos si tienen callback
+    primerMetodo: function () {
+        console.log('Desplegar Informacion del Generador');
     },
-    otroNombre: function () {
-        console.log('y Luego va a correr el metodo otroNombre');
+    traerMail: function () {
+        var done = this.async();
+
+        function traerMailusuario(id) {
+            console.log('Se devuelve el correo del Usuario: ' + id);
+            setTimeout(function () {
+                var correo = {correo:'correo@mail.com'};
+                console.log('Se demoro 3 segundos en terminar');
+                console.log(correo);
+                done();
+            }, 3000)
+
+        }
+
+        traerMailusuario(1);
+    },
+    decirChao: function () {
+        console.log('Gracias por usar el generador');
     }
 
 });

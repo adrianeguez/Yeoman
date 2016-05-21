@@ -1,279 +1,112 @@
-# Yeoman Series - Paso 2
+# Yeoman Series - Paso 3
 
-Crear nuestro primer generador.
+Entender como corren los metodos en el generador.
 
 ## Desarrollo
 
-### Crear Carpeta `generator-prueba`
+## Crear metodos en **index.js** en la carpeta `app`
 
-Lo primero que vamos a hacer es crear una carpeta de la siguiente manera:  `generator-nombre-del-generador`. 
+Lo primero que vamos a hacer es modificar los metodos que creamos en el anterior paso, y agregar un método más.
 
-```
-    --generator-nombre-del-generador/
-```
-
-El nombre de la carpeta es muy importante, ya que yeoman es sensitivo a los nombres de archivos y carpetas, después usaremos el `generator-nombre-del-generador` de nuestra carpeta creada para poder correr nuestro generador de esta manera **al finalizar este tutorial**:
-
-```
-yo nombre-del-generador
-```
-En nuestro ejemplo usaremos el siguiente nombre de la carpeta `generator-prueba`, quedando nuestro directorio de la siguiente manera:
-
-```
-    --generator-prueba/
-```
-
-### Crear archivo `package.json`
-
-Primero debemos de ingresar a nuestra carpeta creada `generator-prueba`
-
-```
-cd generator-prueba
-```
-
-Despues vamos a crear un nuevo archivo `package.json` con el siguiente comando:
-
-```
-npm init
-```
-
-Node nos preguntara los siguientes datos:
-
-```
-name:
-version: 
-description: 
-entry point: 
-test command:
-git repository:
-keywords:
-author:
-license:
-
-```
-
-Este archivo es utilizado por nodejs para instalar dependencias scripts en Node.js, en nuestro caso lo usaremos para `delimitar la estructura de nuestro generador`.
-
-Al finalizar podemos abrir con cualquier editor de texto el archivo `package.json`, el cual lo vamos a editar para que quede de la siguiente manera:
-
-```javascript
-{
-    "name": "generator-prueba",
-    "version": "1.0.0",
-    "description": "Tutorial de Uso de Yeoman",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-        },
-    "keywords": [
-        "yeoman-generator"
-    ],
-    "dependencies": {
-        "yeoman-generator": "^0.20.2"
-    },
-    "author": "Adrian Eguez",
-    "license": "MIT"
-}
-```
-
-No hay que olvidar que el `"name": "generator-prueba"` junto con el nombre de nuestra carpeta `generator-prueba` son los que dan instrucciones de correr a Yeoman, estos deben de ser los mismos.
-```
-...
-    "name": "generator-prueba",
-...
-```
-
-Dentro de Keywords debemos de usar `generator-prueba` para que la gente pueda encontrar nuestro paquete, así:
-
-```
-...
-"keywords": [
-    "yeoman-generator"
-],
-...
-```
-### Generador principal y Sub-Generadores
-
-Yeoman, como lo dijimos hace unos momentos, utiliza mucho el nombre y estructura de los archivos para poder funcionar de manera correcta. 
-
-Un `sub-generador` son comandos extra dentro de nuestro generador, como por ejemplo:
-
-```
-yo prueba:crear-pagina-web
-```
-
-El cual posiblemente nos ayude a crear archivos de una pagina web.
-
-Dentro de nuestro `package.json` debemos de describir donde se encuentran el  `generador principal` y los `sub generadores`. 
-
-Para esto vamos a anadir un objeto json llamado `files` en nuestro archivo `package.json` que tenga un arreglo javascript.
-```
-...
-    "files": [],
-...
-```
-
-Dentro de este objeto `files` vamos a agregar en todos nuestros generadores una carpeta llamada `app` para referenciar nuestro generador principal, en este caso `yo generator-prueba`.
-
-Primero crearemos la carpeta app:
-
-```
-    --generator-prueba/
-        --app/
-        package.json
-```
-
-Y por ultimo agregamos el nombre de nuestra carpeta en el `package.json`
-
-```
-...
-    "files": [
-        'app'
-    ],
-...
-```
-
-Para anadir **Sub Generadores** hacemos exactamente lo que hicimos para el generador principal, solamente que cambiando el nombre de la carpeta. Nuestro **Sub Generador** se llamara `crear-pagina`, así que creamos una carpeta con ese nombre:
-
-```
-    --generator-prueba/
-        --app/
-        --crear-pagina/
-        package.json
-```
-
-Y agregamos el nombre de nuestra carpeta en el `package.json`
-
-
-```
-...
-    "files": [
-        'app',
-        'crear-pagina'
-    ],
-...
-```
-
-Finalmente nuestro `package.json` queda de la siguiente manera:
-
-
-```javascript
-    {
-        "name": "generator-prueba",
-        "version": "1.0.0",
-        "description": "Tutorial de Uso de Yeoman",
-        "main": "index.js",
-        "scripts": {
-            "test": "echo \"Error: no test specified\" && exit 1"
-        },
-        "keywords": [
-            "yeoman-generator"
-        ],
-        "files": [
-            "app",
-            "crear-pagina"
-        ],
-        "dependencies": {
-            "yeoman-generator": "^0.20.2"
-        },
-        "author": "Adrian Eguez",
-        "license": "MIT"
-    }
-```
-
-### Buena practica al crear Sub Generadores
-
-Al empezar a crecer nuestro generador yeoman los **Sub Generadores** van a empezar a ocupar espacio en nuestro directorio, lo que podemos hacer es guardar todos los generadores en una carpeta llamada `generadores` y referenciarlos en nuestro archivo `package.json`.
-
-Nuestro directorio quedaria de la siguiente manera:
-```
-    --generator-prueba/
-        --generators/
-            --app/
-            --crear-pagina/
-    package.json
-```
-Y nuestros archivo `package.json` así:
-```
-...
-    "files": [
-        'generators/app',
-        'generators/crear-pagina'
-    ],
-...
-```
-
-## Funcionalidad de los generadores
-
-Por default yeoman va a buscar un archivo llamado `index.js` para correr nuestros generadores.
-
-Vamos a agregar los archivos `index.js` a cada uno de nuestros generadores, quedando nuestro directorio así:
-
-```
-    --generator-prueba/
-        --generators/
-            --app/
-                index.js
-            --crear-pagina/
-                index.js
-        package.json
-```
-
-Ahora en cada uno de los generadores vamos a implementar la funcionalidad llenando el archivo `index.js` de la carpeta `app` de la siguiente manera:
+Vamos a cambiar nuestro archivo `index.js` en la carpeta `app` con lo siguiente:
 
 ```javascript
 var generators = require('yeoman-generator');
 
 module.exports = generators.Base.extend({
-    //Los metodos corren en orden
-    cualquierNombre: function () { 
-        console.log('Primero va a correr el metodo cualquierNombre');
+//Corren en orden los metodos si no tienen callback
+    primerMetodo: function () {
+        console.log('Desplegar Informacion del Generador');
     },
-    otroNombre: function () {
-        console.log('y Luego va a correr el metodo otroNombre');
+    traerMail: function () {
+        var done = this.async();
+        function traerMailusuario(id) {
+            setTimeout(function () {
+                var correo = {correo:'correo@mail.com'};
+                console.log('Se devuelve el correo del Usuario:'+id);
+                console.log('Se demoro 3 segundos en terminar');
+                console.log(correo);
+                done();
+            }, 3000)
+        }
+        traerMailusuario(1);
+    },
+    decirChao: function () {
+        console.log('Gracias por usar el generador');
     }
 });
 ```
 
-y luego en el archivos `index.js`  de la carpeta `crear-pagina` de la siguiente manera:
+#### Método `primerMetodo`
+
+En este método lo único que vamos a desplegar es un mensaje de consola al usuario.
+
+### Método `traerMail`
+
+En este método vamos a simular que nos estamos conectando a un `api de correos` y que nos está devolviendo el correo de un usuario gracias al `id`
 
 ```javascript
-var generators = require('yeoman-generator');
-
-module.exports = generators.Base.extend({
-    //Los metodos corren en orden
-    crearPagina: function () {
-        console.log('Primero va a crear la pagina');
-    },
-    iniciarServidorWeb: function () {
-        console.log('y Luego va a levantar el servidor web');
+    traerMail: function () {
+        var done = this.async();
+        function traerMailusuario(id) {
+            console.log('Se devuelve el correo del Usuario:');
+            setTimeout(function () {
+                console.log('Se demoro 3 segundos en terminar');
+                done();
+            }, 3000)
+        }
+        traerMailusuario(1);
     }
-});
 ```
-Hay que notar que los metodos `cualquierNombre` y `otroNombre` de la carpeta `app` y en **cualquier generador** van a correr en el orden escrito.
 
-## Correr un generador
+Hay que notar que estamos usando un `método asincrono` para simular que estamos esperando un `api`, o por ejemplo preguntandole al usuario por `consola` cual es el nombre del proyecto.
 
-Para nosotros poder correr un generador debemos localizarnos en nuestra carpeta `generator-prueba` y correr el siguiente comando:
-```
-npm link
-```
-y vamos a usar la instruccion `yo prueba`:
+En este caso definimos una variable `done` que la llamamos al haber terminado de ejecutar la lógica que necesitamos en este paso.
 
-```
-yo prueba
-```
-La cual nos bota un output en la consola así:
-```
-Primero va a correr el metodo cualquierNombre
-y Luego va a correr el metodo otroNombre
-```
-Y si probamos nuestro `Sub Generador` llamado `crearpagina` vamos a tener el siguiente output:
 
+```javascript
+...
+    var done = this.async();
+...
+...
+    done();
+...
 ```
-Primero va a crear la pagina
-y Luego va a levantar el servidor web
+
+#### Método `decirChao`
+
+En este método lo único que vamos a desplegar es un mensaje de consola despidiendo al  usuario.
+
+## Resultado del Generador `app`
+
+Al correr nuestro generador el output es el siguiente:
 ```
+Desplegar Informacion del Generador
+Se devuelve el correo del Usuario: 1
+Se demoro 3 segundos en terminar
+{ correo: 'correo@mail.com' }
+Gracias por usar el generador
+```
+
+El Código ha funcionado de `manera esperada`.
+
+## Crear metodos en **index.js** en la carpeta `crear-pagina`
+
+En este caso vamos a usar el `mismo codigo` de la carpeta `app.js`, pero vamos a comentar 2 líneas, son `var done = this.async();` y `done()`.
+```
+...
+    traerMail: function () {
+    //var done = this.async();
+    function traerMailusuario(id) {
+...
+...
+        console.log(correo);
+        //done();
+    }, 3000)
+...
+```
+
+
 ## Conclusion
 
 Creamos desde cero un generador yeoman.
