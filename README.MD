@@ -1,11 +1,21 @@
-# Yeoman Series
+# Yeoman Series - Paso 1
 
-Repositorio para aprender el uso de yeoman y gulp en la automatización de procesos en el desarrollo de software.
+Instalar yeoman
 
-## Organización del Tutorial
+## Requisitos
 
-El tutorial está divido en pasos
+* Nodejs
 
-Autor
+Lo que necesitamos es primero tener instalado [Node.js](https://nodejs.org), dentro de la pagina oficial se encuentra los pasos para la instalacion en Windows, Linux y Mac.
 
-[Adrian Eguez](https://github.com/adrianeguez)
+## Desarrollo
+
+Usando el gestionador de paquetes de node [npm](https://www.npmjs.com) instalamos con el siguiente comando yeoman en nuestra pc.
+
+```
+npm install -g yo
+```
+
+## Autor
+
+* [Adrian Eguez](https://github.com/adrianeguez)
