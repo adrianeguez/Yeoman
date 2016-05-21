@@ -80,7 +80,7 @@ No hay que olvidar que el `"name": "generator-prueba"` junto con el nombre de nu
 ...
 ```
 
-Dentro de Keywords debemos de usar el nombre de nuestro generator tambien, en este caso `generator-prueba` asi:
+Dentro de Keywords debemos de usar `generator-prueba` para que la gente pueda encontrar nuestro paquete, así:
 
 ```
 ...
