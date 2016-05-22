@@ -1,128 +1,250 @@
 # Yeoman Series - Paso 3
 
-Entender como corren los metodos en el generador.
+Aprenderemos a recibir inputs del usuario.
 
-## Desarrollo
+# Interacción con el Usuario
 
-## Crear metodos en **index.js** en la carpeta `app`
+## Interacción tipo `input`
 
-Lo primero que vamos a hacer es modificar los metodos que creamos en el anterior paso, y agregar un método más.
+Ahora vamos a empezar a recibir datos del usuario para poder generar, por ejemplo, un `controlador en angularjs` o un `factory` con el nombre determinado por el usuario.
 
-Vamos a cambiar nuestro archivo `index.js` en la carpeta `app` con lo siguiente:
+En nuestro caso vamos a empezar solo a recibir los inputs.
+
+Vamos a modificar nuestro archivo `index.js` en nuestra carpeta `app` para dejar solamente un método llamado `prompting`, de la siguiente manera:
 
 ```javascript
-var generators = require('yeoman-generator');
+...
+  prompting: function () {
+  }
+...
+```
 
-module.exports = generators.Base.extend({
-//Corren en orden los metodos si no tienen callback
-    primerMetodo: function () {
-        console.log('Desplegar Informacion del Generador');
-    },
-    traerMail: function () {
-        var done = this.async();
-        function traerMailusuario(id) {
-            setTimeout(function () {
-                var correo = {correo:'correo@mail.com'};
-                console.log('Se devuelve el correo del Usuario:'+id);
-                console.log('Se demoro 3 segundos en terminar');
-                console.log(correo);
-                done();
-            }, 3000)
+El nombre de método [prompting](http://yeoman.io/authoring/running-context.html) se debe por los 8 pasos estandarizados que tiene `yeoman` de los cuales hablaremos en un futuro.
+
+`Yeoman` utiliza la libreria [inquirer.js](https://github.com/SBoudrias/Inquirer.js) para preguntar al usuario los diferentes datos que vamos a necesitar.
+
+Lo primero que haremos es agregar un arreglo de preguntas al usuario en el archivo `index.js`:
+```javascript
+...
+prompting: function () {
+  var respuestas = [{
+      type: 'input',
+      name: 'nombre',
+      message: '¿Cuál es tu nombre?',
+      default: 'nombre'
+    }, {
+      type: 'input',
+      name: 'apellido',
+      message: '¿Cuál es tu apellido?',
+      default: 'apellido'
+  }];
+}
+...
+```
+Después vamos a agregar el `Callback asincrono` de nuestras preguntas de la siguiente manera:
+```javascript
+...
+  prompting: function () {
+    ...
+    default: 'apellido'
+    }];
+    var usuarioResponde = function (respuestas) {
+        this.log('Nombre del usuario:', respuestas.nombre);
+        this.log('Apellido del usuario:', respuestas.apellido);
+      }.bind(this);
+  }
+...
+```
+
+Notemos que ya no estamos usando el `console.log` sino el `this.log` de `Yeoman`, además al final de nuestra función utilizamos un método `.bind(this)` requerido por **Yeoman**.
+
+Finalmente vamos a devolver la funcion `this.prompt()` invocando las `preguntas` y el `Callback` que implementamos, nuestro archivo finalmente se encuentra así:
+```javascript
+prompting: function () {
+  var respuestas = [{
+    type: 'input',
+    name: 'nombre',
+    message: '¿Cuál es tu nombre?',
+    default: 'nombre'
+  }, {
+    type: 'input',
+    name: 'apellido',
+    message: '¿Cuál es tu apellido?',
+    default: 'apellido'
+  }];
+  var usuarioResponde = function (respuestas) {
+      this.log('Nombre del usuario:', respuestas.nombre);
+      this.log('Apellido del usuario:', respuestas.apellido);
+    }.bind(this);
+  return this.prompt(respuestas, usuarioResponde);
+}
+```
+Al correr nuestro generador e ingresar de nombre `Adrian` y apellido `Eguez`:
+```
+yo prueba
+```
+El output es el siguiente:
+```
+? ¿Cuál es tu nombre? (nombre) Adrian
+? ¿Cuál es tu nombre? Adrian
+? ¿Cuál es tu apellido? Eguez
+Apellido del usuario: Adrian
+Nombre del usuario: Eguez
+```
+Si dejamos en blanco los campos el resultado será a su vez el siguiente:
+```
+? ¿Cuál es tu nombre? nombre
+? ¿Cuál es tu apellido? apellido
+Nombre del usuario: nombre
+Apellido del usuario: apellido
+```
+## Interacción tipo `confirm`, `list`, `rawlist`, `expand`, `checkbox` y `password`
+
+Hay varios `tipos de inputs` que el usuario puede ingresar. Vamos a usar algunos métodos, para hacerlo cambiamos el `arreglo respuestas` en nuestro archivo `index.js` en la carpeta `app` así:
+
+```javascript
+var respuestas = [{
+        type: 'input',
+        name: 'nombre',
+        message: '¿Cuál es tu nombre?',
+        default: 'nombre'
+      }, {
+        type: 'input',
+        name: 'apellido',
+        message: '¿Cuál es tu apellido?',
+        default: 'apellido'
+      },{
+        type: 'password',
+        message: 'Ingrese su password de "Pizzas Yeoman"',
+        name: 'password'
+      }, {
+        type: 'confirm',
+        name: 'mayorEdad',
+        message: '¿Eres mayor de edad?',
+        default: false
+      }, {
+        type: 'list',
+        name: 'tamanoPizza',
+        message: '¿Qué tamaño de pizza desea ordenar?',
+        choices: ['Jumbo', 'Grande', 'Estandar', 'Medio', 'Pequeño', 'Micro'],
+        default: 'Estandar'
+      }, {
+        type: 'rawlist',
+        name: 'tamanoBebida',
+        message: '¿Qué tamaño su bebida?',
+        choices: ['Grande', 'Estandar', 'Pequeño'],
+        default: 'Estandar'
+      }, {
+        type: 'checkbox',
+        message: 'Seleccione sus ingredientes',
+        name: 'ingredientes',
+        choices: [
+        {
+          name: 'Pepperoni',
+          disabled: '¡Se termino!, lo sentimos'
+        },
+        {
+          name: 'Mozzarella',
+          checked: true
+        },
+        {
+          name: 'Tomate',
+          checked: true
+        },
+        {
+          name: 'Jamon'
+        },
+        {
+          name: 'Olivas',
+          disabled: '¡Se termino!, lo sentimos'
+        },
+        {
+          name: 'Queso Extra'
         }
-        traerMailusuario(1);
-    },
-    decirChao: function () {
-        console.log('Gracias por usar el generador');
-    }
-});
+      ]
+      },
+      {
+        type: 'expand',
+        message: '¿Cómo le parecio nuestro servicio? Elija una ópcion a b c x',
+        name: 'satisfaccion',
+        default: 3,
+        choices: [
+        {
+            key: 'a',
+            name: 'Muy Bueno',
+            value: 4
+          },
+          {
+            key: 'b',
+            name: 'Bueno',
+            value: 3
+          },
+          {
+            key: 'c',
+            name: 'Regular',
+            value: 2
+          },
+          {
+            key: 'x',
+            name: 'Malo',
+            value: 1
+          }
+          ]
+      }];
 ```
-
-#### Método `primerMetodo`
-
-En este método lo único que vamos a desplegar es un mensaje de consola al usuario.
-
-### Método `traerMail`
-
-En este método vamos a simular que nos estamos conectando a un `api de correos` y que nos está devolviendo el correo de un usuario gracias al `id`
-
-```javascript
-    traerMail: function () {
-        var done = this.async();
-        function traerMailusuario(id) {
-            console.log('Se devuelve el correo del Usuario:');
-            setTimeout(function () {
-                console.log('Se demoro 3 segundos en terminar');
-                done();
-            }, 3000)
-        }
-        traerMailusuario(1);
-    }
-```
-
-Hay que notar que estamos usando un `método asincrono` para simular que estamos esperando un `api`, o por ejemplo preguntandole al usuario por `consola` cual es el nombre del proyecto.
-
-En este caso definimos una variable `done` que la llamamos al haber terminado de ejecutar la lógica que necesitamos en este paso.
-
-
+Por ultimo agregamos los logs:
 ```javascript
 ...
-    var done = this.async();
-...
-...
-    done();
-...
-```
-
-#### Método `decirChao`
-
-En este método lo único que vamos a desplegar es un mensaje de consola despidiendo al  usuario.
-
-## Resultado del Generador `app`
-
-Al correr nuestro generador el output es el siguiente:
-```
-Desplegar Informacion del Generador
-Se devuelve el correo del Usuario: 1
-Se demoro 3 segundos en terminar
-{ correo: 'correo@mail.com' }
-Gracias por usar el generador
-```
-
-El Código ha funcionado de `manera esperada`.
-
-## Crear metodos en **index.js** en la carpeta `crear-pagina`
-
-En este caso vamos a usar el `mismo codigo` de la carpeta `app.js`, pero vamos a comentar 2 líneas, son `var done = this.async();` y `done()`.
-```javascript
-...
-    traerMail: function () {
-    //var done = this.async();
-    function traerMailusuario(id) {
-...
-...
-        console.log(correo);
-        //done();
-    }, 3000)
+var usuarioResponde = function (respuestas) {
+  this.log('DETALLES DE LA ORDEN');
+  this.log('Nombre del usuario:', respuestas.nombre);
+  this.log('Apellido del usuario:', respuestas.apellido);
+  this.log('Password del usuario:', respuestas.password);
+  this.log('Mayor de Edad:', respuestas.mayorEdad);
+  this.log('Tamaño de la pizza:', respuestas.tamanoPizza);
+  this.log('Tamaño de la bebida:', respuestas.tamanoBebida);
+  this.log('Ingredientes:');
+  for (var i = 0; i < respuestas.ingredientes.length; i++) {
+    this.log('>>' + respuestas.ingredientes[i]);
+  }
+  this.log('Satisfacción del Usuario:', respuestas.satisfaccion);
+}.bind(this);
 ...
 ```
-## Resultado del Generador `crear-pagina`
 
-Al correr nuestro generador el output es el siguiente:
+
+Al correr nuestro generador tenemos el siguiente output:
 ```
-Desplegar Informacion del Generador que no usa Async()
-Se devuelve el correo del Usuario: 1
-Gracias por usar el generador sin Async()
-Se demoro 3 segundos en terminar
-{ correo: 'correo@mail.com' }
+Bienvenido a pizzas Yeoman
+? ¿Cuál es tu nombre? Adrian
+? ¿Cuál es tu apellido? Eguez
+? Ingrese su password de "Pizzas Yeoman" *********
+? ¿Eres mayor de edad? Yes
+? ¿Qué tamaño de pizza desea ordenar? Grande
+? ¿Qué tamaño su bebida? Estandar
+? Seleccione sus ingredientes Mozzarella, Tomate, Jamon
+? ¿Cómo le parecio nuestro servicio? Elija una ópcion a b c x Bueno
+DETALLES DE LA ORDEN
+Nombre del usuario: Adrian
+Apellido del usuario: Eguez
+Password del usuario: clave1234
+Mayor de Edad: true
+Tamaño de la pizza: Grande
+Tamaño de la bebida: Estandar
+Ingredientes:
+>> Mozzarella
+>> Tomate
+>> Jamon
+Satisfacción del Usuario: 3
 ```
 
-En este caso el codigo `no funciono de la manera esperada`, esto se debe que debemos de atar a promesas asincronas a nuestros metodos para que se ejecuten en orden, sino cómo en el ejemplo, primero resuelve el codigo sincrono y luego el codigo asincrono cuando recibe una respuesta.
+
 
 ## Conclusion
 
-Modificamos los metodos de los generadores simulando un api de correos.
+Aprendimos a recibir información del Usuario.
 
-Contrastamos la diferencia y la necesidad de usar código asincrono.
+Utilizamos ejemplos de los tipos de inputs `confirm`, `list`, `rawlist`, `expand`, `checkbox` y `password`.
 
 ## Autor
 
