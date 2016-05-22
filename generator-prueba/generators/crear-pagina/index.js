@@ -9,7 +9,7 @@ module.exports = generators.Base.extend({
     //var done = this.async();
 
     function traerMailusuario(id) {
-      console.log('Se devuelve el correo del Usuario: 1' + id);
+      console.log('Se devuelve el correo del Usuario: ' + id);
       setTimeout(function () {
         var correo = {
           correo: 'correo@mail.com'

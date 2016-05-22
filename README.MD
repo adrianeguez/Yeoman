@@ -110,7 +110,7 @@ En este caso vamos a usar el `mismo codigo` de la carpeta `app.js`, pero vamos a
 Al correr nuestro generador el output es el siguiente:
 ```
 Desplegar Informacion del Generador que no usa Async()
-Se devuelve el correo del Usuario: 11
+Se devuelve el correo del Usuario: 1
 Gracias por usar el generador sin Async()
 Se demoro 3 segundos en terminar
 { correo: 'correo@mail.com' }
