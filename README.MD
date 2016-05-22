@@ -105,13 +105,23 @@ En este caso vamos a usar el `mismo codigo` de la carpeta `app.js`, pero vamos a
     }, 3000)
 ...
 ```
+## Resultado del Generador `crear-pagina`
 
+Al correr nuestro generador el output es el siguiente:
+```
+Desplegar Informacion del Generador que no usa Async()
+Se devuelve el correo del Usuario: 11
+Gracias por usar el generador sin Async()
+Se demoro 3 segundos en terminar
+{ correo: 'correo@mail.com' }
+```
+
+En este caso el codigo `no funciono de la manera esperada`, esto se debe que debemos de atar a promesas asincronas a nuestros metodos para que se ejecuten en orden, sino cómo en el ejemplo, primero resuelve el codigo sincrono y luego el codigo asincrono cuando recibe una respuesta.
 
 ## Conclusion
 
-Creamos desde cero un generador yeoman.
-Construimos generadores, sub-generadores y métodos dentro de Yeoman.
-Corrimos los generadores que creamos.
+Modificamos los metodos de los generadores simulando un api de correos.
+Contrastamos la diferencia y la necesidad de usar código asincrono.
 
 ## Autor
 
