@@ -93,7 +93,7 @@ El Código ha funcionado de `manera esperada`.
 ## Crear metodos en **index.js** en la carpeta `crear-pagina`
 
 En este caso vamos a usar el `mismo codigo` de la carpeta `app.js`, pero vamos a comentar 2 líneas, son `var done = this.async();` y `done()`.
-```
+```javascript
 ...
     traerMail: function () {
     //var done = this.async();
