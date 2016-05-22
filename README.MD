@@ -6,7 +6,7 @@ Crear nuestro primer generador.
 
 ### Crear Carpeta `generator-prueba`
 
-Lo primero que vamos a hacer es crear una carpeta de la siguiente manera:  `generator-nombre-del-generador`. 
+Lo primero que vamos a hacer es crear una carpeta de la siguiente manera:  `generator-nombre-del-generador`.
 
 ```
     --generator-nombre-del-generador/
@@ -41,9 +41,9 @@ Node nos preguntara los siguientes datos:
 
 ```
 name:
-version: 
-description: 
-entry point: 
+version:
+description:
+entry point:
 test command:
 git repository:
 keywords:
@@ -94,7 +94,7 @@ Dentro de Keywords debemos de usar `generator-prueba` para que la gente pueda en
 ```
 ### Generador principal y Sub-Generadores
 
-Yeoman, como lo dijimos hace unos momentos, utiliza mucho el nombre y estructura de los archivos para poder funcionar de manera correcta. 
+Yeoman, como lo dijimos hace unos momentos, utiliza mucho el nombre y estructura de los archivos para poder funcionar de manera correcta.
 
 Un `sub-generador` son comandos extra dentro de nuestro generador, como por ejemplo:
 
@@ -104,7 +104,7 @@ yo prueba:crear-pagina-web
 
 El cual posiblemente nos ayude a crear archivos de una pagina web.
 
-Dentro de nuestro `package.json` debemos de describir donde se encuentran el  `generador principal` y los `sub generadores`. 
+Dentro de nuestro `package.json` debemos de describir donde se encuentran el  `generador principal` y los `sub generadores`.
 
 Para esto vamos a anadir un objeto json llamado `files` en nuestro archivo `package.json` que tenga un arreglo javascript.
 ```
@@ -197,8 +197,8 @@ Y nuestros archivo `package.json` así:
 ```
 ...
     "files": [
-        'generators/app',
-        'generators/crear-pagina'
+        "generators/app",
+        "generators/crear-pagina"
     ],
 ...
 ```
@@ -226,7 +226,7 @@ var generators = require('yeoman-generator');
 
 module.exports = generators.Base.extend({
     //Los metodos corren en orden
-    cualquierNombre: function () { 
+    cualquierNombre: function () {
         console.log('Primero va a correr el metodo cualquierNombre');
     },
     otroNombre: function () {
